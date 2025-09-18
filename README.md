@@ -4,7 +4,7 @@
 Technical Features 👉
 - Uses custom json user model schema for saving/exporting data to database (mongoose/MongoDB)
 - jwt encoding and hashing through API for secure payloads
-- token caching in localStorage
+- Token caching in localStorage
 
 Capabilities 👉
 - Creating Linkly profile
