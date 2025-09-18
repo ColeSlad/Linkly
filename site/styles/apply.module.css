@@ -1,0 +1,23 @@
+.background {
+    /* position: relative;
+    background: url("/images/background-desktop.jpg") */
+    /* position: relative;
+    background: url("/svg/register-background.svg"); */
+    height: 100vh;
+    width: 100%;
+    background: radial-gradient(circle at top, rgb(22, 7, 65), rgb(10, 73, 113), rgb(89, 2, 89));
+    background-size: 300% 300%;
+    animation: color 24s ease-in-out infinite;
+}
+
+@keyframes color {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
+}
