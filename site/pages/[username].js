@@ -7,6 +7,8 @@ import SocialTree from '../components/SocialTree';
 import ShareButton from '../components/ShareButton';
 import NavBar from '@/components/Navbar';
 
+// Dynamic profile page at /[username]
+// Fetches public profile data from backend and renders LinkTree + socials
 const Username = () => {
 
   const router = useRouter();
@@ -23,6 +25,7 @@ const Username = () => {
   })
 
   useEffect(() => {
+    // When the router has the username param, fetch profile from backend
     if(router.query?.username) {
       fetch(`http://localhost:8000/get/${router.query.username}`)
       .then((res) => res.json())

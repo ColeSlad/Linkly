@@ -1,6 +1,7 @@
 const User = require('../models/User');
 const jwt_decode = require('jwt-decode');
 
+// Save socials for the authenticated user
 const saveSocials = async(req,res) => {
     const { tokenMail, socials } = req.body;
 
@@ -18,6 +19,7 @@ const saveSocials = async(req,res) => {
     }
 }
 
+// Save basic profile fields (name, bio, avatar)
 const saveProfile = async(req,res) => {
     const { tokenMail, name, bio, avatar } = req.body;
 
@@ -37,6 +39,7 @@ const saveProfile = async(req,res) => {
     }
 }
 
+// Replace user's links with provided links from frontend
 const saveLinks = async(req, res) => {
     const { tokenMail, links } = req.body;
 

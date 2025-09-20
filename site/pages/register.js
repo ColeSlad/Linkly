@@ -9,6 +9,7 @@ import MyHead from '@/components/MyHead';
 
 const Register = () => {
 
+  // Redirect if already logged in
   useEffect(() => {
     if(localStorage.getItem('LinkTreeToken')) return window.location.href = "/dashboard";
   }, [])
@@ -82,7 +83,6 @@ const Register = () => {
         )
       })
 
-    
   }
 
   const toggleShowPassword = () => {
