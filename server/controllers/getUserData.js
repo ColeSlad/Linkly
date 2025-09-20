@@ -1,5 +1,6 @@
 const User = require('../models/User')
 
+// Public endpoint to fetch a user's profile and links by username
 const getUserData = async(req, res) => {
     const username = req.params.username;
 
@@ -24,6 +25,7 @@ const getUserData = async(req, res) => {
     }
 }
 
+// endpoint to fetch only social links by username
 const getUserSocials = async(req, res) => {
     const username = req.params.username;
     try {

@@ -16,6 +16,7 @@ const Login = () => {
 
   const [passwordShown, setPasswordShown] = useState(false);
 
+  // Redirect to dashboard if already logged in
   useEffect(() => {
     if(localStorage.getItem('LinkTreeToken')) return window.location.href = "/dashboard";
   }, [])
@@ -23,6 +24,7 @@ const Login = () => {
   const handleLogin = (e) => {
     e.preventDefault();
 
+    // Call backend login endpoint. Expect JSON { status: 'success'|'not found', token }
     fetch('http://localhost:8000/api/login', {
       method: 'POST',
       headers: {

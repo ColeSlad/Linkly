@@ -2,7 +2,7 @@ import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from "react";
 
-
+// Update hook used to re-render component when token state changes
 const useForceUpdate = () => {
     const [val, setVal] = useState(0);
     return () => setVal(val => val + 1);
@@ -12,12 +12,14 @@ const NavBar = () => {
     const router = useRouter()
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
     
+    // Track whether user is logged in
     const [hasToken, setHasToken] = useState(false);
 
     const toggleMobileMenu = () => {
         setMobileMenuOpen(!mobileMenuOpen);
     };
 
+    // Close menu when route changes
     useEffect(()=>{
         setMobileMenuOpen(false);
     }, [router.asPath])

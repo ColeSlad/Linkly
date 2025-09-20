@@ -2,7 +2,7 @@ import React from 'react'
 import LinkTreeCard from './LinkTreeCard';
 import { AnimatePresence, motion } from 'framer-motion';
 
-
+// Component that renders a user's avatar, name, bio, and a vertical list of link cards
 const LinkTree = ({data}) => {
   const {name, avatar, bio, links} = data;
   return (

@@ -14,6 +14,7 @@ export default function App({ Component, pageProps }) {
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
 
+  // default user context 
   const [userData, setUserData] = useState({
     name: '',
     role: '',

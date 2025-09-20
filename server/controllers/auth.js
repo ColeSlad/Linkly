@@ -1,10 +1,12 @@
 const User = require('../models/User')
 const jwt = require('jsonwebtoken');
 
-
+// Making a new user
+// Validates username and password length, then creates a user document and returns a JWT.
 const registerUser = async(req, res) => {
     const { username, email, password, category } = req.body;
 
+    // allow only letters and numbers with RegEx
     const valid = /^[a-zA-Z0-9_]+$/;
 
     if(!(valid.test(username))) {
@@ -16,24 +18,26 @@ const registerUser = async(req, res) => {
     }
 
     try {
-        // const defaultLink = { url: 'https://www.google.com', title: 'Google', icon: 'https://cdn.iconscout.com/icon/free/png-512/free-avatar-372-456324.png?f=avif&w=512' };
+        // TODO - hash password before storing
         const user = await User.create({username, email, password, role: category, links: []});
         const token = jwt.sign({email: email}, process.env.SECRET_JWT);
 
         return res.json({message: 'user created', status: 'success', 'token': token, id: user._id})
     } catch (err) {
+        // Duplicate key error (email or username already exists)
         if(err.code === 11000) {
             return res.json({message: "There is already an account with your username or email", status: 'error'})
         }
         return res.json({message: err.message, status: 'error'})
     }
-
-    
 }
 
+// logging in an existing user
+// Finds the user by email, returns JWT on success.
 const loginUser = async (req, res) => {
     const { email, password } = req.body;
     try {
+        // TODO - Use bcrypt for hashed passwords
         const user = await User.findOne({email: email, password: password});
         if(!user) {
             return res.json({status: 'not found', error: 'Email or Password is incorrect'});

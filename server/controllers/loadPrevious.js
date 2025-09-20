@@ -1,6 +1,7 @@
 const User = require('../models/User');
 const jwt_decode = require('jwt-decode');
 
+// Load saved social media information for user
 const loadSocials = async(req, res) => {
     const { tokenMail } = req.body;
 
@@ -17,6 +18,7 @@ const loadSocials = async(req, res) => {
     }
 }
 
+// Load saved links for user
 const loadLinks = async(req, res) => {
     const { tokenMail } = req.body;
 
