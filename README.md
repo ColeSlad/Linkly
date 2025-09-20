@@ -3,7 +3,7 @@
 
 Technical Features 👉
 - Uses custom json user model schema for saving/exporting data to database (mongoose/MongoDB)
-- jwt encoding and hashing through API for secure payloads
+- jwt encoding through API for secure payloads
 - Token caching in localStorage
 
 Capabilities 👉
