@@ -7,7 +7,8 @@ const ShareButton = () => {
   const router = useRouter();
 
   const copyLink = () => {
-    navigator.clipboard.writeText(window.Location.hostname + router.query.username);
+    //navigator.clipboard.writeText(`http://localhost:3000/${router.query.username}`);
+    navigator.clipboard.writeText(window.location.href);
     toast.success('Copied to clipboard!', {
       position: 'bottom-right',
       theme: 'dark'
