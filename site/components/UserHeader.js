@@ -72,7 +72,7 @@ const UserHeader = () => {
           </Link>
         </div>
           <div className="flex flex-row">
-          <Link href={`http://localhost:3000/${username}`} className='mr-5'>
+          <Link href={`/${username}`} className='mr-5'>
             <div className="inline-flex text-white text-right items-center bg-cyan-900 bg-opacity-20 px-5 py-2 rounded-lg">
               <div className="text-xs md:text-md flex flex-col flex-wrap">
                 <span className='font-bold'>{username}</span>
