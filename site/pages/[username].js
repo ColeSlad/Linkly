@@ -1,6 +1,7 @@
 import LinkTree from '../components/LinkTree'
 import React, { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
+import { API_URL } from '../lib/api'
 import { toast } from 'react-toastify';
 import Link from 'next/link';
 import SocialTree from '../components/SocialTree';
@@ -27,7 +28,7 @@ const Username = () => {
   useEffect(() => {
     // When the router has the username param, fetch profile from backend
     if(router.query?.username) {
-      fetch(`http://localhost:8000/get/${router.query.username}`)
+      fetch(`${API_URL}/get/${router.query.username}`)
       .then((res) => res.json())
       .then((data) => {
         if(data.status === 'error') {

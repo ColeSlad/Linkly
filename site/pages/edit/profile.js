@@ -4,6 +4,7 @@ import UserHeader from '../../components/UserHeader';
 import { toast } from 'react-toastify';
 import { useRouter } from 'next/router';
 import NavBar from '@/components/Navbar';
+import { API_URL } from '../../lib/api';
 
 const profile = () => {
 
@@ -51,7 +52,7 @@ const profile = () => {
 
   const saveProfile = (e) => {
     e.preventDefault();
-    fetch(`http://localhost:8000/save/profile`, {
+    fetch(`${API_URL}/save/profile`, {
       method: 'POST',
       headers: {
         'Content-type': 'application/json'
@@ -78,7 +79,7 @@ const profile = () => {
   }
   const saveSocials = (e) => {
     e.preventDefault();
-    fetch(`http://localhost:8000/save/socials`, {
+    fetch(`${API_URL}/save/socials`, {
       method: 'POST',
       headers: {
         'Content-type': 'application/json'
@@ -104,7 +105,7 @@ const profile = () => {
 
   useEffect(() => {
     if(!localStorage.getItem('LinkTreeToken')) return router.push('/login');
-    fetch('http://localhost:8000/load/socials', {
+    fetch(`${API_URL}/load/socials`, {
       method: 'POST',
       headers: {
         'Content-type': 'application/json'

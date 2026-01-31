@@ -4,6 +4,7 @@ import UserHeader from '../components/UserHeader';
 import { toast } from 'react-toastify';
 import UserContext from '../context/userContext';
 import NavBar from '@/components/Navbar';
+import { API_URL } from '../lib/api';
 
 const dashboard = () => {
 
@@ -13,7 +14,7 @@ const dashboard = () => {
 
   useEffect(() => {
     if(!localStorage.getItem('LinkTreeToken')) return window.location.href = "/login";
-    fetch('http://localhost:8000/data/dashboard', {
+    fetch(`${API_URL}/data/dashboard`, {
       method: 'POST',
       headers: {
         'Content-type': 'application/json'

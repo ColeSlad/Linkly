@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import NavBar from '@/components/Navbar';
 import MyHead from '@/components/MyHead';
+import { API_URL } from '../lib/api';
 
 const Register = () => {
 
@@ -43,7 +44,7 @@ const Register = () => {
       theme: "dark"
     })
 
-    fetch('http://localhost:8000/api/register', {
+    fetch(`${API_URL}/api/register`, {
       method: 'POST',
       headers: {
         'content-type': 'application/json'
