@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import NavBar from '@/components/Navbar';
 import MyHead from '@/components/MyHead';
+import { API_URL } from '../lib/api';
 
 const Login = () => {
 
@@ -25,7 +26,7 @@ const Login = () => {
     e.preventDefault();
 
     // Call backend login endpoint. Expect JSON { status: 'success'|'not found', token }
-    fetch('http://localhost:8000/api/login', {
+    fetch(`${API_URL}/api/login`, {
       method: 'POST',
       headers: {
         'content-type': 'application/json'

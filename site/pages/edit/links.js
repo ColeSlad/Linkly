@@ -2,6 +2,7 @@ import { toast } from 'react-toastify';
 import UserHeader from '../../components/UserHeader'
 import React, { useState, useEffect, useContext } from 'react'
 import NavBar from '@/components/Navbar';
+import { API_URL } from '../../lib/api';
 
 const links = () => {
   const [links, setLinks] = useState([{url: '', title: '', icon: ''}]);
@@ -36,7 +37,7 @@ const links = () => {
       icon: iconsArray[index]
     }))
 
-    fetch(`http://localhost:8000/save/links`, {
+    fetch(`${API_URL}/save/links`, {
       method: 'POST',
       headers: {
         'Content-type': 'application/json'
@@ -78,7 +79,7 @@ const links = () => {
 
   useEffect(() => {
     if(!localStorage.getItem('LinkTreeToken')) return router.push('/login');
-    fetch('http://localhost:8000/load/links', {
+    fetch(`${API_URL}/load/links`, {
       method: 'POST',
       headers: {
         'Content-type': 'application/json'
