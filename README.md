@@ -1,12 +1,12 @@
 <img width="1727" height="875" alt="image" src="https://github.com/user-attachments/assets/fcffc1a9-4591-4e62-bbed-fe5f8c3675b2" />
-🌳 Linkly - Decorated full stack Link Tree app built with Next.js and Express.js ✅
+Linkly - Decorated full stack Link Tree app built with Next.js and Express.js 
 
-Technical Features 👉
+Technical Features 
 - Uses custom json user model schema for saving/exporting data to database (mongoose/MongoDB)
 - jwt encoding through API for secure payloads
 - Token caching in localStorage
 
-Capabilities 👉
+Capabilities 
 - Creating Linkly profile
 - Viewing other Linkly profiles
 - Login and register using username, email, and password, with auth built upon custom api, saving information to MongoDB
@@ -15,7 +15,7 @@ Capabilities 👉
 - View dashboard
 - Signing in and out
 
-Tools used 👉
+Tools used 
 - MongoDB (mongoose)
 - jwt
 - Express.js
@@ -24,9 +24,9 @@ Tools used 👉
 - Node.js
 - Tailwind CSS
 
-Deployed with 👉
+Deployed with 
 - Vercel
 - Render
 
-Soon 👉
+Soon 
 - Analytics based on profile clicks
