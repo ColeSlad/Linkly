@@ -1,5 +1,6 @@
 <img width="1727" height="875" alt="image" src="https://github.com/user-attachments/assets/fcffc1a9-4591-4e62-bbed-fe5f8c3675b2" />
 Linkly - Decorated full stack Link Tree app built with Next.js and Express.js 
+https://linkly-liart.vercel.app/ 
 
 Technical Features 
 - Uses custom json user model schema for saving/exporting data to database (mongoose/MongoDB)
