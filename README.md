@@ -24,6 +24,9 @@ Tools used 👉
 - Node.js
 - Tailwind CSS
 
+Deployed with 👉
+- Vercel
+- Render
+
 Soon 👉
 - Analytics based on profile clicks
-- Deployment (probably will happen very soon)
