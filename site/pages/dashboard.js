@@ -5,15 +5,18 @@ import { toast } from 'react-toastify';
 import UserContext from '../context/userContext';
 import NavBar from '@/components/Navbar';
 import { API_URL } from '../lib/api';
+import ServerLoading from '../components/ServerLoading';
 
 const dashboard = () => {
 
   const [data, setData] = useState({})
+  const [isLoading, setIsLoading] = useState(true);
 
   const { setUserData } = useContext(UserContext);
 
   useEffect(() => {
     if(!localStorage.getItem('LinkTreeToken')) return window.location.href = "/login";
+    setIsLoading(true);
     fetch(`${API_URL}/data/dashboard`, {
       method: 'POST',
       headers: {
@@ -24,8 +27,9 @@ const dashboard = () => {
       })
     }).then((res) => res.json())
     .then((data) => {
-      if(data.status === 'error') { 
-        toast.error('An error has occurred', 
+      setIsLoading(false);
+      if(data.status === 'error') {
+        toast.error('An error has occurred',
         {
           position: "bottom-right",
           theme: "dark",
@@ -34,18 +38,15 @@ const dashboard = () => {
       setData(data.userData);
       setUserData(data.userData);
       localStorage.setItem('userUsername', data.userData.username)
-      // toast.success(data.message, 
-      // {
-      //   position: "bottom-right",
-      //   theme: "dark",
-      // })
     }).catch((err) => {
       console.log(err);
+      setIsLoading(false);
     })
   }, [])
 
   return (
     <>
+      <ServerLoading isLoading={isLoading} />
       <NavBar />
       <div className="">
       <UserHeader/>
