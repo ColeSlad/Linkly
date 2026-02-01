@@ -7,6 +7,7 @@ import { useRouter } from 'next/router';
 import NavBar from '@/components/Navbar';
 import MyHead from '@/components/MyHead';
 import { API_URL } from '../lib/api';
+import ServerLoading from '../components/ServerLoading';
 
 const Register = () => {
 
@@ -25,6 +26,7 @@ const Register = () => {
   const [passwordShown, setPasswordShown] = useState(false);
 
   const [submitted, setSubmitted] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleCategoryChange = (e) => {
     if(category !== e.target.value) {
@@ -38,12 +40,13 @@ const Register = () => {
 
   const handleRegister = (e) => {
     e.preventDefault();
-    if(!category) return toast.error('Please select an account type!', 
+    if(!category) return toast.error('Please select an account type!',
     {
       position: "bottom-right",
       theme: "dark"
     })
 
+    setIsLoading(true);
     fetch(`${API_URL}/api/register`, {
       method: 'POST',
       headers: {
@@ -57,6 +60,7 @@ const Register = () => {
       })
     }).then(res => res.json())
     .then((data) => {
+      setIsLoading(false);
 
       if(data.status === 'error') {
         toast.error(data.message, {
@@ -66,7 +70,7 @@ const Register = () => {
       }
 
       if(data.status === 'success') {
-        toast.success('You have been registered successfully', 
+        toast.success('You have been registered successfully',
         {
           position: "bottom-right",
           theme: "dark",
@@ -76,7 +80,8 @@ const Register = () => {
         router.push('/login')
       }
       }).catch((err) => {
-        toast.error(err.message, 
+        setIsLoading(false);
+        toast.error(err.message,
         {
           position: "bottom-right",
           theme: "dark",
@@ -92,6 +97,7 @@ const Register = () => {
 
   return (
     <>
+      <ServerLoading isLoading={isLoading} />
       <NavBar />
       <MyHead
         title="Register | Linkly"

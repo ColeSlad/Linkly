@@ -7,6 +7,7 @@ import { useRouter } from 'next/router';
 import NavBar from '@/components/Navbar';
 import MyHead from '@/components/MyHead';
 import { API_URL } from '../lib/api';
+import ServerLoading from '../components/ServerLoading';
 
 const Login = () => {
 
@@ -14,6 +15,7 @@ const Login = () => {
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
   const [passwordShown, setPasswordShown] = useState(false);
 
@@ -24,6 +26,7 @@ const Login = () => {
 
   const handleLogin = (e) => {
     e.preventDefault();
+    setIsLoading(true);
 
     // Call backend login endpoint. Expect JSON { status: 'success'|'not found', token }
     fetch(`${API_URL}/api/login`, {
@@ -37,8 +40,9 @@ const Login = () => {
       })
     }).then((res) => res.json())
     .then((data) => {
+      setIsLoading(false);
       if(data.status === "success") {
-        toast.success('You have been logged in successfully', 
+        toast.success('You have been logged in successfully',
         {
           position: "bottom-right",
           theme: "dark",
@@ -47,7 +51,7 @@ const Login = () => {
         router.push('/dashboard')
       }
       if(data.status === "not found") {
-        toast.error('Email or Password is incorrect', 
+        toast.error('Email or Password is incorrect',
         {
           position: "bottom-right",
           theme: "dark",
@@ -55,9 +59,10 @@ const Login = () => {
       }
     }).catch((err) => {
       console.log(err);
+      setIsLoading(false);
     })
 
-    
+
     setEmail('');
     setPassword('');
   }
@@ -68,6 +73,7 @@ const Login = () => {
 
   return (
     <>
+      <ServerLoading isLoading={isLoading} />
       <NavBar />
       <MyHead
         title="Login | Linkly"
