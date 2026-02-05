@@ -78,7 +78,7 @@ const Login = () => {
       <MyHead
         title="Login | Linkly"
         description="Login to Linkly"
-        image="/images/favicon.ico"
+        image="/images/tree.svg"
         url="/login"
       />
       <section className={styles.background + " min-h-screen flex justify-center items-center"}>
