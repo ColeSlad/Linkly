@@ -1,8 +1,7 @@
 import "../styles/globals.css";
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
-//import Footer from "../components/Footer";
-//import NavBar from "../components/Navbar";
+import Head from 'next/head';
 import NProgress from 'nprogress';
 import '../public/nprogress.css';
 import { ToastContainer} from 'react-toastify';
@@ -46,6 +45,10 @@ export default function App({ Component, pageProps }) {
 
   return(
     <>
+    <Head>
+      <title>Linkly</title>
+      <meta name="description" content="Share all your links in one place" />
+    </Head>
     <Script strategy="lazyOnload" src={`https://www.googletagmanager.com/gtag/js?id=G-WYTYXQXVK6`} />
     <Script strategy="lazyOnload">
                 {`
