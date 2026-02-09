@@ -9,7 +9,7 @@ export default function Home() {
       <MyHead
         title="Linkly"
         description="Welcome to Linkly, a place to share your links with others!"
-        image="/images/favicon.ico"
+        image="/images/tree.svg"
         url="/"
       />
 
