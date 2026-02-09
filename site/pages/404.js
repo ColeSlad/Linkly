@@ -10,7 +10,7 @@ export default function Custom404() {
             <title>404 Page not found</title>
             <meta name="My site" content="Content not found" />
             <meta name="viewport" content="width=device-width, initial-scale=1" />
-            <link rel="icon" href="/images/favicon.ico" />
+            <link rel="icon" href="/images/tree.svg" type="image/svg+xml" />
         </Head>
         <div className="w-auto max-w-3xl bg-transparent rounded-xl m-auto my-20 pb-10 text-white text-center">
             <img className="w-full md:w-8/12 m-auto rounded-xl" src="https://upload.wikimedia.org/wikipedia/commons/d/d7/Emoticon_Face_Frown_GE.png" alt=""/>
