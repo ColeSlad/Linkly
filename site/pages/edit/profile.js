@@ -27,12 +27,52 @@ const profile = () => {
 
   const [selectedImage, setSelectedImage] = useState(null);
 
-  function setAvatarToImageFile(file) {
-    const reader = new FileReader();
-    reader.addEventListener('load', (event) => {
-      setAvatar(event.target.result)
+  const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
+
+  function compressImage(file, maxWidth = 400) {
+    return new Promise((resolve) => {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const img = new Image();
+        img.onload = () => {
+          const canvas = document.createElement('canvas');
+          const ratio = maxWidth / img.width;
+          canvas.width = maxWidth;
+          canvas.height = img.height * ratio;
+
+          const ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+
+          // Compress to JPEG with 0.8 quality
+          const compressedDataUrl = canvas.toDataURL('image/jpeg', 0.8);
+          resolve(compressedDataUrl);
+        };
+        img.src = e.target.result;
+      };
+      reader.readAsDataURL(file);
     });
-    reader.readAsDataURL(file);
+  }
+
+  async function handleImageUpload(file) {
+    if (!file) return;
+
+    // Check file size
+    if (file.size > MAX_FILE_SIZE) {
+      toast.error('Image too large. Max size is 5MB. Compressing...', {
+        position: 'bottom-right',
+        theme: 'dark'
+      });
+    }
+
+    // Compress the image
+    const compressedImage = await compressImage(file);
+    setAvatar(compressedImage);
+    setSelectedImage(URL.createObjectURL(file));
+
+    toast.success('Image uploaded successfully', {
+      position: 'bottom-right',
+      theme: 'dark'
+    });
   }
 
   const handleSocials = (e) => {
@@ -150,21 +190,30 @@ const profile = () => {
                     <input value={avatar} onChange={(e) => setAvatar(e.target.value)} name="pfp" type="text" placeholder="Set Profile Picture..." className='bg-transparent focus:outline-none w-full'/>
                     <img className='w-10 rounded-full' src={avatar} alt=""/>
                   </span>
-                  <label className='border border-1 inline-block py-2 px-6 cursor-pointer rounded-lg text-white'>
-                    <p className=''>Choose a file</p>
+                  <label className='border border-1 inline-block py-2 px-6 cursor-pointer rounded-lg text-white hover:bg-cyan-900 hover:bg-opacity-30 transition-all'>
+                    <p>Choose a file</p>
                     <input className='hidden' type="file" accept="image/*" onChange={(e) => {
-                      setSelectedImage(URL.createObjectURL(e.target.files[0]));
-                      setAvatarToImageFile(e.target.files[0])
+                      if (e.target.files[0]) {
+                        handleImageUpload(e.target.files[0]);
+                      }
                     }}/>
-                    
                   </label>
-                  <span className='text-white mt-2'>
-                    {selectedImage && (
-                      <div>
-                        <button onClick={() => setSelectedImage(null)}>Remove</button>
-                      </div>
-                    )}
-                  </span>
+                  <p className='text-gray-400 text-sm mt-1'>Max 5MB. Will be compressed to 400px width.</p>
+                  {selectedImage && (
+                    <div className='flex flex-col items-center mt-2'>
+                      <img src={selectedImage} alt="Preview" className='w-20 h-20 rounded-full object-cover mb-2'/>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setSelectedImage(null);
+                          setAvatar('https://cdn.iconscout.com/icon/free/png-512/free-avatar-372-456324.png?f=avif&w=512');
+                        }}
+                        className='text-red-400 hover:text-red-300 text-sm'
+                      >
+                        Remove
+                      </button>
+                    </div>
+                  )}
                   <input className="text-white mt-2 bg-cyan-500 w-11/12 sm:w-40 px-4 py-2 rounded-md border-2 border-cyan-800 cursor-pointer hover:bg-cyan-600 hover:scale-105 transition-all duration-500" type="submit" value="Save profile" />
                 </form>
               </div>
