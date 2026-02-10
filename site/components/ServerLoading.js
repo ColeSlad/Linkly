@@ -5,7 +5,7 @@ const ServerLoading = ({ isLoading }) => {
 
   useEffect(() => {
     if (isLoading) {
-      // After 3 seconds, show "waking up" message (indicates cold start)
+      // After 3 seconds, show waking up message (indicates cold start)
       const timer = setTimeout(() => {
         setShowWakeUp(true);
       }, 3000);
