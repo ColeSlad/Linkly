@@ -2,7 +2,7 @@ import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from "react";
 
-// Update hook used to re-render component when token state changes
+// Update hook used to rerender component when token state changes
 const useForceUpdate = () => {
     const [val, setVal] = useState(0);
     return () => setVal(val => val + 1);

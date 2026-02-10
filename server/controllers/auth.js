@@ -2,7 +2,7 @@ const User = require('../models/User')
 const jwt = require('jsonwebtoken');
 
 // Making a new user
-// Validates username and password length, then creates a user document and returns a JWT.
+// vali username and password length, creates a user document and returns a JWT
 const registerUser = async(req, res) => {
     const { username, email, password, category } = req.body;
 
@@ -18,7 +18,7 @@ const registerUser = async(req, res) => {
     }
 
     try {
-        // TODO - hash password before storing
+        // TODO - hash password before storing prolly
         const user = await User.create({username, email, password, role: category, links: []});
         const token = jwt.sign({email: email}, process.env.SECRET_JWT);
 
@@ -37,7 +37,7 @@ const registerUser = async(req, res) => {
 const loginUser = async (req, res) => {
     const { email, password } = req.body;
     try {
-        // TODO - Use bcrypt for hashed passwords
+        // TODO - Use bcrypt for hashed passwords or something
         const user = await User.findOne({email: email, password: password});
         if(!user) {
             return res.json({status: 'not found', error: 'Email or Password is incorrect'});
