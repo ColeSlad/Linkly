@@ -35,9 +35,9 @@ const Username = () => {
       .then((res) => res.json())
       .then((data) => {
         if(data.status === 'error') {
-          console.log(data.error);
+          console.log(data.message);
           setIsLoading(false);
-          return toast.error(data.error, {
+          return toast.error(data.message, {
             position: 'bottom-right',
             theme: 'dark'
           })
