@@ -1,8 +1,11 @@
 const User = require('../models/User')
 const jwt = require('jsonwebtoken');
+const bcrypt = require('bcrypt');
+
+const SALT_ROUNDS = 12;
 
 // Making a new user
-// vali username and password length, creates a user document and returns a JWT
+// validates username and password length, creates a user document and returns a JWT
 const registerUser = async(req, res) => {
     const { username, email, password, category } = req.body;
 
@@ -18,8 +21,8 @@ const registerUser = async(req, res) => {
     }
 
     try {
-        // TODO - hash password before storing prolly
-        const user = await User.create({username, email, password, role: category, links: []});
+        const hashedPassword = await bcrypt.hash(password, SALT_ROUNDS);
+        const user = await User.create({username, email, password: hashedPassword, role: category, links: []});
         const token = jwt.sign({email: email}, process.env.SECRET_JWT);
 
         return res.json({message: 'user created', status: 'success', 'token': token, id: user._id})
@@ -33,13 +36,16 @@ const registerUser = async(req, res) => {
 }
 
 // logging in an existing user
-// Finds the user by email, returns JWT on success.
+// Finds the user by email, verifies bcrypt hash, returns JWT on success.
 const loginUser = async (req, res) => {
     const { email, password } = req.body;
     try {
-        // TODO - Use bcrypt for hashed passwords or something
-        const user = await User.findOne({email: email, password: password});
+        const user = await User.findOne({email: email});
         if(!user) {
+            return res.json({status: 'not found', error: 'Email or Password is incorrect'});
+        }
+        const passwordMatch = await bcrypt.compare(password, user.password);
+        if(!passwordMatch) {
             return res.json({status: 'not found', error: 'Email or Password is incorrect'});
         }
         const token = jwt.sign({email: email}, process.env.SECRET_JWT);

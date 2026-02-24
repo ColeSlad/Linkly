@@ -1,12 +1,12 @@
 const User = require('../models/User');
-const jwt_decode = require('jwt-decode');
+const jwt = require('jsonwebtoken');
 
 // Save socials for the authenticated user
 const saveSocials = async(req,res) => {
     const { tokenMail, socials } = req.body;
 
     try {
-        const decodedTokenMail = jwt_decode(tokenMail, process.env.SECRET_JWT);
+        const decodedTokenMail = jwt.verify(tokenMail, process.env.SECRET_JWT);
         const email = decodedTokenMail.email;
 
         const user = await User.findOne({email: email});
@@ -24,7 +24,7 @@ const saveProfile = async(req,res) => {
     const { tokenMail, name, bio, avatar } = req.body;
 
     try {
-        const decodedTokenMail = jwt_decode(tokenMail, process.env.SECRET_JWT);
+        const decodedTokenMail = jwt.verify(tokenMail, process.env.SECRET_JWT);
         const email = decodedTokenMail.email;
 
         const user = await User.findOne({email: email});
@@ -44,7 +44,7 @@ const saveLinks = async(req, res) => {
     const { tokenMail, links } = req.body;
 
     try {
-        const decodedTokenMail = jwt_decode(tokenMail, process.env.SECRET_JWT);
+        const decodedTokenMail = jwt.verify(tokenMail, process.env.SECRET_JWT);
         const email = decodedTokenMail.email;
 
         const user = await User.findOne({email: email});
