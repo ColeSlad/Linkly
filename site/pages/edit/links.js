@@ -46,13 +46,11 @@ const links = () => {
         tokenMail: localStorage.getItem('LinkTreeToken'),
         links: linksData
       })
-    }).then((res) => res.json)
+    }).then((res) => res.json())
     .then((data) => {
       if(data.status === 'error') {
-        return toast.error(data.error, {
-          position: 'bottom-right',
-          theme: 'dark'
-        })
+        localStorage.removeItem('LinkTreeToken');
+        return window.location.href = '/login';
       }
       toast.success('Links saved successfully', {
       position: 'bottom-right',
@@ -90,10 +88,8 @@ const links = () => {
     }).then((res) => res.json())
     .then((data) => {
       if(data.status === 'error') {
-        return toast.error(data.error, {
-          position: 'bottom-right',
-          theme: 'dark'
-        })
+        localStorage.removeItem('LinkTreeToken');
+        return window.location.href = '/login';
       }
       setLinks(data.links);
     })

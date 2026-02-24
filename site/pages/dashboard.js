@@ -1,7 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react'
 import LinkBox from '../components/LinkBox';
 import UserHeader from '../components/UserHeader';
-import { toast } from 'react-toastify';
 import UserContext from '../context/userContext';
 import NavBar from '@/components/Navbar';
 import { API_URL } from '../lib/api';
@@ -29,11 +28,8 @@ const dashboard = () => {
     .then((data) => {
       setIsLoading(false);
       if(data.status === 'error') {
-        toast.error('An error has occurred',
-        {
-          position: "bottom-right",
-          theme: "dark",
-        })
+        localStorage.removeItem('LinkTreeToken');
+        return window.location.href = '/login';
       }
       setData(data.userData);
       setUserData(data.userData);
