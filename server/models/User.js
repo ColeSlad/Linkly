@@ -2,7 +2,6 @@ const mongoose = require('mongoose');
 const { model, Schema } = mongoose;
 
 // User schema for profile, auth and link stuff.
-// TODO - fix hashing of passwords b4 storage
 const User = new Schema({
     name: {type: String},
     bio: {type: String},
