@@ -3,6 +3,7 @@ require('dotenv').config()
 const express = require('express')
 const app = express();
 const cors = require('cors');
+const helmet = require('helmet');
 
 
 const mongoose = require('mongoose');
@@ -17,6 +18,7 @@ const { loadSocials, loadLinks } = require('./controllers/loadPrevious')
 
 
 
+app.use(helmet());
 app.use(cors());
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ limit: '10mb', extended: true }));
