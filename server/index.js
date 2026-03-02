@@ -20,7 +20,11 @@ const { loadSocials, loadLinks } = require('./controllers/loadPrevious')
 
 
 app.use(helmet());
-app.use(cors());
+app.use(cors({
+    origin: ['https://linkly-liart.vercel.app'],
+    methods: ['GET', 'POST'],
+    credentials: true,
+}));
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ limit: '10mb', extended: true }));
 
