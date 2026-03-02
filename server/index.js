@@ -4,6 +4,7 @@ const express = require('express')
 const app = express();
 const cors = require('cors');
 const helmet = require('helmet');
+const rateLimit = require('express-rate-limit');
 
 
 const mongoose = require('mongoose');
@@ -30,9 +31,18 @@ app.get('/', (req, res) => {
     res.send('hello!');
 })
 
+// Rate limiter: max 10 attempts per 15 minutes per IP
+const authLimiter = rateLimit({
+    windowMs: 15 * 60 * 1000,
+    max: 10,
+    message: { status: 'error', message: 'Too many attempts, please try again later.' },
+    standardHeaders: true,
+    legacyHeaders: false,
+});
+
 // auth routes
-app.post('/api/register', registerUser);
-app.post('/api/login', loginUser);
+app.post('/api/register', authLimiter, registerUser);
+app.post('/api/login', authLimiter, loginUser);
 
 // Requires valid token on frontend from local storage
 app.post('/data/dashboard', dashboardData);
