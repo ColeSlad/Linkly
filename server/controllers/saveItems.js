@@ -47,6 +47,18 @@ const saveLinks = async(req, res) => {
         const decodedTokenMail = jwt.verify(tokenMail, process.env.SECRET_JWT);
         const email = decodedTokenMail.email;
 
+        const invalidLink = links.find(({ link }) => {
+            try {
+                const { protocol } = new URL(link.url);
+                return protocol !== 'https:' && protocol !== 'http:';
+            } catch {
+                return true; // unparseable URL
+            }
+        });
+        if (invalidLink) {
+            return res.json({ message: 'All link URLs must start with http:// or https://', status: 'error' });
+        }
+
         const user = await User.findOne({email: email});
 
         const newLinks = links.map((link) => ({
