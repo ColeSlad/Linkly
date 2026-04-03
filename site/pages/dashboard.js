@@ -4,6 +4,7 @@ import UserHeader from '../components/UserHeader';
 import UserContext from '../context/userContext';
 import NavBar from '@/components/Navbar';
 import { API_URL } from '../lib/api';
+import { isLoggedIn } from '../lib/auth';
 import ServerLoading from '../components/ServerLoading';
 
 const dashboard = () => {
@@ -14,21 +15,18 @@ const dashboard = () => {
   const { setUserData } = useContext(UserContext);
 
   useEffect(() => {
-    if(!localStorage.getItem('LinkTreeToken')) return window.location.href = "/login";
+    if(!isLoggedIn()) return window.location.href = "/login";
     setIsLoading(true);
     fetch(`${API_URL}/data/dashboard`, {
       method: 'POST',
       headers: {
         'Content-type': 'application/json'
       },
-      body: JSON.stringify({
-        tokenMail: localStorage.getItem('LinkTreeToken')
-      })
+      credentials: 'include',
     }).then((res) => res.json())
     .then((data) => {
       setIsLoading(false);
       if(data.status === 'error') {
-        localStorage.removeItem('LinkTreeToken');
         return window.location.href = '/login';
       }
       setData(data.userData);
@@ -52,7 +50,7 @@ const dashboard = () => {
             <LinkBox title="Growth" number="50%" svg="chart" bgcolor="bg-green-400"/>
           </section>
           <section>
-            
+
           </section>
         </main>
       </div>

@@ -4,18 +4,31 @@ const bcrypt = require('bcrypt');
 
 const SALT_ROUNDS = 12;
 
-// Making a new user
-// validates username and password length, creates a user document and returns a JWT
+const isProd = process.env.NODE_ENV === 'production';
+
+// HttpOnly cookie carries the JWT — JS can never read it
+const tokenCookieOptions = {
+    httpOnly: true,
+    secure: isProd,
+    sameSite: isProd ? 'none' : 'lax',
+    maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+};
+
+// Plain cookie lets frontend JS know the user is logged in (not the token itself)
+const flagCookieOptions = {
+    httpOnly: false,
+    secure: isProd,
+    sameSite: isProd ? 'none' : 'lax',
+    maxAge: 7 * 24 * 60 * 60 * 1000,
+};
+
 const registerUser = async(req, res) => {
     const { username, email, password, category } = req.body;
 
-    // allow only letters and numbers with RegEx
     const valid = /^[a-zA-Z0-9_]+$/;
-
     if(!(valid.test(username))) {
         return res.json({message: 'Username may only contain letters, numbers, and _', status: 'error'});
     }
-
     if(password.length < 8 || password.length > 64) {
         return res.json({message: 'Password must be between 8 and 64 characters in length', status: 'error'});
     }
@@ -25,18 +38,17 @@ const registerUser = async(req, res) => {
         const user = await User.create({username, email, password: hashedPassword, role: category, links: []});
         const token = jwt.sign({email: email}, process.env.SECRET_JWT);
 
-        return res.json({message: 'user created', status: 'success', 'token': token, id: user._id})
+        res.cookie('token', token, tokenCookieOptions);
+        res.cookie('loggedIn', '1', flagCookieOptions);
+        return res.json({message: 'user created', status: 'success', id: user._id});
     } catch (err) {
-        // Duplicate key error (email or username already exists)
         if(err.code === 11000) {
-            return res.json({message: "There is already an account with your username or email", status: 'error'})
+            return res.json({message: "There is already an account with your username or email", status: 'error'});
         }
-        return res.json({message: err.message, status: 'error'})
+        return res.json({message: err.message, status: 'error'});
     }
 }
 
-// logging in an existing user
-// Finds the user by email, verifies bcrypt hash, returns JWT on success.
 const loginUser = async (req, res) => {
     const { email, password } = req.body;
     try {
@@ -49,10 +61,19 @@ const loginUser = async (req, res) => {
             return res.json({status: 'not found', error: 'Email or Password is incorrect'});
         }
         const token = jwt.sign({email: email}, process.env.SECRET_JWT);
-        return res.json({message: 'user found', status: 'success', 'token': token, id: user._id});
+
+        res.cookie('token', token, tokenCookieOptions);
+        res.cookie('loggedIn', '1', flagCookieOptions);
+        return res.json({message: 'user found', status: 'success', id: user._id});
     } catch (err) {
         return res.json({status: 'error', message: `An error occurred: ${err.message}`});
     }
 }
 
-module.exports = { registerUser, loginUser }
+const logoutUser = (_req, res) => {
+    res.clearCookie('token', tokenCookieOptions);
+    res.clearCookie('loggedIn', flagCookieOptions);
+    return res.json({message: 'logged out', status: 'success'});
+}
+
+module.exports = { registerUser, loginUser, logoutUser }

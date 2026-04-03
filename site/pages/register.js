@@ -7,13 +7,14 @@ import { useRouter } from 'next/router';
 import NavBar from '@/components/Navbar';
 import MyHead from '@/components/MyHead';
 import { API_URL } from '../lib/api';
+import { isLoggedIn } from '../lib/auth';
 import ServerLoading from '../components/ServerLoading';
 
 const Register = () => {
 
   // Redirect if already logged in
   useEffect(() => {
-    if(localStorage.getItem('LinkTreeToken')) return window.location.href = "/dashboard";
+    if(isLoggedIn()) return window.location.href = "/dashboard";
   }, [])
 
   const router = useRouter();
@@ -35,7 +36,6 @@ const Register = () => {
     else {
       setCategory('');
     }
-
   }
 
   const handleRegister = (e) => {
@@ -52,12 +52,8 @@ const Register = () => {
       headers: {
         'content-type': 'application/json'
       },
-      body: JSON.stringify({
-        username,
-        email,
-        password,
-        category
-      })
+      credentials: 'include',
+      body: JSON.stringify({ username, email, password, category })
     }).then(res => res.json())
     .then((data) => {
       setIsLoading(false);
@@ -75,9 +71,8 @@ const Register = () => {
           position: "bottom-right",
           theme: "dark",
         })
-        localStorage.setItem('LinkTreeToken', data.token);
         setSubmitted(true);
-        router.push('/login')
+        router.push('/dashboard')
       }
       }).catch((err) => {
         setIsLoading(false);

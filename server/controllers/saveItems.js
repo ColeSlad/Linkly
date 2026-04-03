@@ -1,15 +1,11 @@
 const User = require('../models/User');
 const jwt = require('jsonwebtoken');
 
-// Save socials for the authenticated user
 const saveSocials = async(req,res) => {
-    const { tokenMail, socials } = req.body;
-
+    const { socials } = req.body;
     try {
-        const decodedTokenMail = jwt.verify(tokenMail, process.env.SECRET_JWT);
-        const email = decodedTokenMail.email;
-
-        const user = await User.findOne({email: email});
+        const decoded = jwt.verify(req.cookies.token, process.env.SECRET_JWT);
+        const user = await User.findOne({email: decoded.email});
         user.socialMedia = socials;
         user.save();
         return res.json({ message: 'saved', status: 'success' })
@@ -19,15 +15,11 @@ const saveSocials = async(req,res) => {
     }
 }
 
-// Save basic profile fields (name, bio, avatar)
 const saveProfile = async(req,res) => {
-    const { tokenMail, name, bio, avatar } = req.body;
-
+    const { name, bio, avatar } = req.body;
     try {
-        const decodedTokenMail = jwt.verify(tokenMail, process.env.SECRET_JWT);
-        const email = decodedTokenMail.email;
-
-        const user = await User.findOne({email: email});
+        const decoded = jwt.verify(req.cookies.token, process.env.SECRET_JWT);
+        const user = await User.findOne({email: decoded.email});
         user.name = name;
         user.bio = bio;
         user.avatar = avatar;
@@ -39,28 +31,24 @@ const saveProfile = async(req,res) => {
     }
 }
 
-// Replace user's links with provided links from frontend
 const saveLinks = async(req, res) => {
-    const { tokenMail, links } = req.body;
-
+    const { links } = req.body;
     try {
-        const decodedTokenMail = jwt.verify(tokenMail, process.env.SECRET_JWT);
-        const email = decodedTokenMail.email;
+        const decoded = jwt.verify(req.cookies.token, process.env.SECRET_JWT);
 
         const invalidLink = links.find(({ link }) => {
             try {
                 const { protocol } = new URL(link.url);
                 return protocol !== 'https:' && protocol !== 'http:';
             } catch {
-                return true; // unparseable URL
+                return true;
             }
         });
         if (invalidLink) {
             return res.json({ message: 'All link URLs must start with http:// or https://', status: 'error' });
         }
 
-        const user = await User.findOne({email: email});
-
+        const user = await User.findOne({email: decoded.email});
         const newLinks = links.map((link) => ({
             url: link.link.url,
             title: link.link.title,
@@ -75,4 +63,4 @@ const saveLinks = async(req, res) => {
     }
 }
 
-module.exports = { saveSocials, saveProfile, saveLinks}
+module.exports = { saveSocials, saveProfile, saveLinks }

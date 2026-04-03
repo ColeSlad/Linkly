@@ -1,12 +1,13 @@
 import { useEffect, useState } from 'react';
 import styles from "../styles/apply.module.css"
 import Footer from '@/components/Footer';
-import { toast, ToastContainer } from 'react-toastify';
+import { toast } from 'react-toastify';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import NavBar from '@/components/Navbar';
 import MyHead from '@/components/MyHead';
 import { API_URL } from '../lib/api';
+import { isLoggedIn } from '../lib/auth';
 import ServerLoading from '../components/ServerLoading';
 
 const Login = () => {
@@ -21,23 +22,20 @@ const Login = () => {
 
   // Redirect to dashboard if already logged in
   useEffect(() => {
-    if(localStorage.getItem('LinkTreeToken')) return window.location.href = "/dashboard";
+    if(isLoggedIn()) return window.location.href = "/dashboard";
   }, [])
 
   const handleLogin = (e) => {
     e.preventDefault();
     setIsLoading(true);
 
-    // Call backend login endpoint. Expect JSON { status: 'success'|'not found', token }
     fetch(`${API_URL}/api/login`, {
       method: 'POST',
       headers: {
         'content-type': 'application/json'
       },
-      body: JSON.stringify({
-        email,
-        password
-      })
+      credentials: 'include',
+      body: JSON.stringify({ email, password })
     }).then((res) => res.json())
     .then((data) => {
       setIsLoading(false);
@@ -47,7 +45,6 @@ const Login = () => {
           position: "bottom-right",
           theme: "dark",
         })
-        localStorage.setItem('LinkTreeToken', data.token);
         router.push('/dashboard')
       }
       if(data.status === "not found") {
@@ -61,7 +58,6 @@ const Login = () => {
       console.log(err);
       setIsLoading(false);
     })
-
 
     setEmail('');
     setPassword('');

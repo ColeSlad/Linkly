@@ -5,6 +5,7 @@ import { toast } from 'react-toastify';
 import { useRouter } from 'next/router';
 import NavBar from '@/components/Navbar';
 import { API_URL } from '../../lib/api';
+import { isLoggedIn } from '../../lib/auth';
 
 const profile = () => {
 
@@ -97,12 +98,8 @@ const profile = () => {
       headers: {
         'Content-type': 'application/json'
       },
-      body: JSON.stringify({
-        tokenMail: localStorage.getItem('LinkTreeToken'),
-        name: name,
-        bio: bio,
-        avatar: avatar
-      })
+      credentials: 'include',
+      body: JSON.stringify({ name, bio, avatar })
     }).then((res) => res.json())
     .then((data) => {
       if(data.status === 'error') {
@@ -122,10 +119,8 @@ const profile = () => {
       headers: {
         'Content-type': 'application/json'
       },
-      body: JSON.stringify({
-        tokenMail: localStorage.getItem('LinkTreeToken'),
-        socials: socials
-      })
+      credentials: 'include',
+      body: JSON.stringify({ socials })
     }).then((res) => res.json())
     .then((data) => {
       if(data.status === 'error') {
@@ -140,15 +135,13 @@ const profile = () => {
   }
 
   useEffect(() => {
-    if(!localStorage.getItem('LinkTreeToken')) return router.push('/login');
+    if(!isLoggedIn()) return router.push('/login');
     fetch(`${API_URL}/load/socials`, {
       method: 'POST',
       headers: {
         'Content-type': 'application/json'
       },
-      body: JSON.stringify({
-        tokenMail: localStorage.getItem('LinkTreeToken')
-      })
+      credentials: 'include',
     }).then((res) => res.json())
     .then((data) => {
       if(data.status === 'error') {

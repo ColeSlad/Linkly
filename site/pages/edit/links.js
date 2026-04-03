@@ -1,8 +1,9 @@
 import { toast } from 'react-toastify';
 import UserHeader from '../../components/UserHeader'
-import React, { useState, useEffect, useContext } from 'react'
+import React, { useState, useEffect } from 'react'
 import NavBar from '@/components/Navbar';
 import { API_URL } from '../../lib/api';
+import { isLoggedIn } from '../../lib/auth';
 
 const links = () => {
   const [links, setLinks] = useState([{url: '', title: '', icon: ''}]);
@@ -32,7 +33,7 @@ const links = () => {
     const titlesArray = Object.values(title);
     const iconsArray = Object.values(icon);
     const linksData = linksArray.map((link, index) => ({
-      link, 
+      link,
       title: titlesArray[index],
       icon: iconsArray[index]
     }))
@@ -42,14 +43,11 @@ const links = () => {
       headers: {
         'Content-type': 'application/json'
       },
-      body: JSON.stringify({
-        tokenMail: localStorage.getItem('LinkTreeToken'),
-        links: linksData
-      })
+      credentials: 'include',
+      body: JSON.stringify({ links: linksData })
     }).then((res) => res.json())
     .then((data) => {
       if(data.status === 'error') {
-        localStorage.removeItem('LinkTreeToken');
         return window.location.href = '/login';
       }
       toast.success('Links saved successfully', {
@@ -64,31 +62,27 @@ const links = () => {
     })
   }
 
-  function readFile(index, file) { 
-    let fileReader = new FileReader(); 
+  function readFile(index, file) {
+    let fileReader = new FileReader();
     if(file) {
-      fileReader.readAsDataURL(file); 
+      fileReader.readAsDataURL(file);
       fileReader.onload = function() {
         handleLinkChange(index, 'icon', fileReader.result);
-      }; 
+      };
     }
-
   }
 
   useEffect(() => {
-    if(!localStorage.getItem('LinkTreeToken')) return router.push('/login');
+    if(!isLoggedIn()) return window.location.href = '/login';
     fetch(`${API_URL}/load/links`, {
       method: 'POST',
       headers: {
         'Content-type': 'application/json'
       },
-      body: JSON.stringify({
-        tokenMail: localStorage.getItem('LinkTreeToken')
-      })
+      credentials: 'include',
     }).then((res) => res.json())
     .then((data) => {
       if(data.status === 'error') {
-        localStorage.removeItem('LinkTreeToken');
         return window.location.href = '/login';
       }
       setLinks(data.links);
@@ -122,7 +116,7 @@ const links = () => {
                           readFile(index, e.target.files[0]);
                         }}/>
                       </label>
-                      {link.icon && 
+                      {link.icon &&
                         <div className='flex h-min'>
                           <img src={link.icon} className='w-10 mr-2 bg-white rounded-full p-0.5'/>
                           <button type="button" onClick={(e) => handleLinkChange(index, 'icon', '')}>

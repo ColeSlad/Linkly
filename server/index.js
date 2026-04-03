@@ -5,13 +5,14 @@ const app = express();
 const cors = require('cors');
 const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
+const cookieParser = require('cookie-parser');
 
 
 const mongoose = require('mongoose');
 mongoose.set('strictQuery', false);
 
 // Route handlers
-const { registerUser, loginUser } = require('./controllers/auth');
+const { registerUser, loginUser, logoutUser } = require('./controllers/auth');
 const { dashboardData } = require('./controllers/dashboard');
 const { getUserData } = require('./controllers/getUserData');
 const { saveSocials, saveProfile, saveLinks } = require('./controllers/saveItems');
@@ -20,6 +21,7 @@ const { loadSocials, loadLinks } = require('./controllers/loadPrevious')
 
 
 app.use(helmet());
+app.use(cookieParser());
 app.use(cors({
     origin: ['https://linkly-liart.vercel.app'],
     methods: ['GET', 'POST'],
@@ -47,6 +49,7 @@ const authLimiter = rateLimit({
 // auth routes
 app.post('/api/register', authLimiter, registerUser);
 app.post('/api/login', authLimiter, loginUser);
+app.post('/api/logout', logoutUser);
 
 // Requires valid token on frontend from local storage
 app.post('/data/dashboard', dashboardData);
