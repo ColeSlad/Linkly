@@ -106,10 +106,8 @@ const profile = () => {
     }).then((res) => res.json())
     .then((data) => {
       if(data.status === 'error') {
-        return toast.error(data.message, {
-          position: 'bottom-right',
-          theme: 'dark'
-        })
+        localStorage.removeItem('LinkTreeToken');
+        return window.location.href = '/login';
       }
       toast.success('Successfully saved profile', {
         position: 'bottom-right',
@@ -131,10 +129,8 @@ const profile = () => {
     }).then((res) => res.json())
     .then((data) => {
       if(data.status === 'error') {
-        return toast.error(data.message, {
-          position: 'bottom-right',
-          theme: 'dark'
-        })
+        localStorage.removeItem('LinkTreeToken');
+        return window.location.href = '/login';
       }
       toast.success('Successfully saved socials', {
         position: 'bottom-right',
@@ -156,10 +152,8 @@ const profile = () => {
     }).then((res) => res.json())
     .then((data) => {
       if(data.status === 'error') {
-        return toast.error(data.error, {
-          position: 'bottom-right',
-          theme: 'dark'
-        })
+        localStorage.removeItem('LinkTreeToken');
+        return window.location.href = '/login';
       }
       setSocials(data.socials);
     })
