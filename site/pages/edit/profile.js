@@ -2,14 +2,11 @@ import React, { useContext, useEffect, useState } from 'react'
 import UserContext from '../../context/userContext';
 import UserHeader from '../../components/UserHeader';
 import { toast } from 'react-toastify';
-import { useRouter } from 'next/router';
 import NavBar from '@/components/Navbar';
 import { API_URL } from '../../lib/api';
 import { isLoggedIn } from '../../lib/auth';
 
 const profile = () => {
-
-  const router = useRouter();
 
   const { userData, setUserData } = useContext(UserContext);
 

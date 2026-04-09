@@ -36,7 +36,7 @@ const registerUser = async(req, res) => {
     try {
         const hashedPassword = await bcrypt.hash(password, SALT_ROUNDS);
         const user = await User.create({username, email, password: hashedPassword, role: category, links: []});
-        const token = jwt.sign({email: email}, process.env.SECRET_JWT);
+        const token = jwt.sign({email: email}, process.env.SECRET_JWT, { expiresIn: '7d' });
 
         res.cookie('token', token, tokenCookieOptions);
         res.cookie('loggedIn', '1', flagCookieOptions);
@@ -60,7 +60,7 @@ const loginUser = async (req, res) => {
         if(!passwordMatch) {
             return res.json({status: 'not found', error: 'Email or Password is incorrect'});
         }
-        const token = jwt.sign({email: email}, process.env.SECRET_JWT);
+        const token = jwt.sign({email: email}, process.env.SECRET_JWT, { expiresIn: '7d' });
 
         res.cookie('token', token, tokenCookieOptions);
         res.cookie('loggedIn', '1', flagCookieOptions);
