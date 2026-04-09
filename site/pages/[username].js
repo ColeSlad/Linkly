@@ -34,7 +34,10 @@ export async function getStaticProps({ params }) {
     const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/get/${username}`);
     const data = await res.json();
 
-    if (data.status !== 'success') {
+    // Only hard-404 when the server explicitly says the user doesn't exist.
+    // Network errors / Render cold starts throw and are treated as a transient
+    // failure — Next.js will retry on the next request.
+    if (data.status === 'error') {
       return { notFound: true };
     }
 
@@ -43,10 +46,11 @@ export async function getStaticProps({ params }) {
         userData: data.userData,
         socials: data.socials ?? null,
       },
-      revalidate: 60 // rebuild cached page in background every 60 seconds
+      revalidate: 60
     };
   } catch (err) {
-    return { notFound: true };
+    // Transient error (network/timeout) — don't cache as 404, retry next visit
+    throw err;
   }
 }
 
