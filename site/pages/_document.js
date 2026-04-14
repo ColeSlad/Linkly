@@ -4,9 +4,9 @@ export default function Document() {
   return (
     <Html lang="en">
       <Head>
-        <link rel="icon" href="/images/tree.svg" type="image/svg+xml" />
+        <link rel="icon" href="/images/favicon.ico"  />
         <link rel="alternate icon" href="/images/favicon.ico" />
-        <link rel="apple-touch-icon" href="/images/tree.svg" />
+        <link rel="apple-touch-icon" href="/images/favicon.ico" />
         <meta name="theme-color" content="#040b1f" />
         <link rel="preconnect" href="https://fonts.googleapis.com"/>
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="true"/>

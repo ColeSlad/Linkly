@@ -97,7 +97,7 @@ const Register = () => {
       <MyHead
         title="Register | Linkly"
         description="Register an account to Linkly"
-        image="/images/tree.svg"
+        image="/images/favicon.ico"
         url="/register"
       />
       <section className={styles.background + " min-h-screen flex justify-center items-center"}>
